@@ -14,7 +14,7 @@ module com.btl.taskmanagement {
     requires java.desktop;
 
     opens taskmanagement to javafx.fxml;
-    opens taskmanagement.Controllers to javafx.fxml;
+    opens taskmanagement.controllers to javafx.fxml;
     exports taskmanagement;
     exports taskmanagement.models;
     exports taskmanagement.controllers;
