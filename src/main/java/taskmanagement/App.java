@@ -1,4 +1,4 @@
-package pomodoro;
+package taskmanagement;
 
 public class App {
 }
