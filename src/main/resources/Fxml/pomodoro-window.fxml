@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="434.0" stylesheets="@../Styles/back-ground-style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="taskmanagement.Controllers.PomodoroController">
+    <Button fx:id="exitButton" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" onAction="#handleExit" prefHeight="43.0" prefWidth="48.0" style="-fx-background-radius: 200; -fx-background-color: #d93131;" text="Exit" textAlignment="CENTER" textFill="WHITE">
+        <font>
+            <Font name="Arial Narrow Bold" size="17.0" />
+        </font>
+    </Button>
+
+    <Circle fill="#d93131" layoutX="217.0" layoutY="227.0" radius="110.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.5" />
+    <Label fx:id="countdownLabel" alignment="CENTER" layoutX="161.0" layoutY="164.0" prefHeight="55.0" prefWidth="112.0" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+        <font>
+            <Font name="Arial Narrow" size="44.0" />
+        </font>
+    </Label>
+    <Circle accessibleRole="BUTTON" fill="#ea4848" layoutX="178.0" layoutY="277.0" onMouseClicked="#startPomodoroButton" radius="24.0" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="3.0" />
+    <Polygon fill="WHITE" layoutX="181.0" layoutY="287.0" mouseTransparent="true" rotate="90.0" scaleX="0.2" scaleY="0.2" scaleZ="0.2" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0">
+        <points>
+            <Double fx:value="-50.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="50.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="0.0" />
+            <Double fx:value="-60.0" />
+        </points>
+    </Polygon>
+    <ImageView fitHeight="35.0" fitWidth="39.0" layoutX="308.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true" />
+
+    <Label fx:id="totalTimeLabel" alignment="CENTER" layoutX="142.0" layoutY="451.0" prefHeight="28.0" prefWidth="150.0" style="-fx-background-color: #d93131; -fx-background-radius: 10; -fx-border-radius: 10;" text="Focused time: none" textFill="WHITE">
+        <font>
+            <Font name="Arial Narrow Bold" size="15.0" />
+        </font>
+    </Label>
+    <Label fx:id="modeLabel" alignment="CENTER" layoutX="133.0" layoutY="400.0" prefHeight="41.0" prefWidth="168.0" style="-fx-background-color: lightblue; -fx-border-color: black; -fx-border-image-width: 2px; -fx-border-radius: 20px; -fx-background-radius: 20px;" text="BREAK">
+        <font>
+            <Font name="Arial Narrow" size="29.0" />
+        </font>
+    </Label>
+    <Circle accessibleRole="BUTTON" fill="#ea4848" layoutX="256.0" layoutY="277.0" onMouseClicked="#stopPomodoroButton" radius="24.0" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="3.0" />
+    <Rectangle accessibleRole="BUTTON" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="20.0" layoutX="246.0" layoutY="267.0" mouseTransparent="true" stroke="WHITE" strokeType="INSIDE" width="20.0" />
+    <Button fx:id="playPauseButton" layoutX="308.0" layoutY="21.0" mnemonicParsing="false" onAction="#handlePlayPause" prefHeight="26.0" prefWidth="54.0" style="-fx-background-color: #d93131; -fx-background-radius: 50;" text="Play" textFill="WHITE">
+        <font>
+            <Font name="Arial Narrow Bold" size="14.0" />
+        </font>
+    </Button>
+    <ComboBox fx:id="songPicker" layoutX="142.0" layoutY="21.0" prefWidth="150.0" style="-fx-background-color: white;" visibleRowCount="4" />
+</AnchorPane>
