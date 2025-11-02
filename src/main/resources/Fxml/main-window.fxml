@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="415.0" prefWidth="700.0" stylesheets="@../Styles/back-ground-style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="taskmanagement.Controllers.CalendarWindowController">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="415.0" prefWidth="700.0" stylesheets="@../Styles/back-ground-style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="taskmanagement.controllers.CalendarWindowController">
 
     <!-- Top bar with buttons and DatePicker -->
     <Button fx:id="previousButton" layoutX="200.0" layoutY="22.0" mnemonicParsing="false" onAction="#handlePreviousButtonAction" style="-fx-background-color: #FF6666;" text="Previous" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="22.0" />

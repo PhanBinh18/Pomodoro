@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="500.0" prefWidth="434.0" stylesheets="@../Styles/back-ground-style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="taskmanagement.Controllers.PomodoroController">
+<AnchorPane prefHeight="500.0" prefWidth="434.0" stylesheets="@../Styles/back-ground-style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="taskmanagement.controllers.PomodoroController">
     <Button fx:id="exitButton" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" onAction="#handleExit" prefHeight="43.0" prefWidth="48.0" style="-fx-background-radius: 200; -fx-background-color: #d93131;" text="Exit" textAlignment="CENTER" textFill="WHITE">
         <font>
             <Font name="Arial Narrow Bold" size="17.0" />
