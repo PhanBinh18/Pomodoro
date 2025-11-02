@@ -1,4 +1,4 @@
-package pomodoro.models;
+package taskmanagement.models;
 
 /*
 Task chứa các thông tin cơ bản về thời điểm bắt đầu, các quãng làm và nghỉ, thời gian bắt buộc, ...
