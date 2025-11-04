@@ -29,6 +29,9 @@ public class Task implements Serializable {
     private Duration sessionElapsedTime = Duration.ZERO; // Thời gian trôi qua trong 1 session
     private Duration totalFocusTime = Duration.ZERO; // Tổng thời gian đã focus
 
+    // [MỚI] Thêm cờ để theo dõi thông báo
+    private boolean notificationSent = false;
+
     public Task(String taskName, LocalTime startTime, Duration focusTime,
                 Duration breakTime, Priority importanceLevel, Duration mandatoryTime) {
         this.taskName = taskName;
@@ -39,6 +42,7 @@ public class Task implements Serializable {
         this.mandatoryTime = mandatoryTime;
         this.currentState = State.READY;
         this.currentStateProperty = new SimpleObjectProperty<>(currentState);
+        // notificationSent mặc định là false, là chính xác
     }
 
     public ObjectProperty<State> currentStateProperty() {
@@ -88,6 +92,15 @@ public class Task implements Serializable {
     public void setTaskDone() { setCurrentState(State.DONE); }
     public void setTaskFailed() { setCurrentState(State.FAIL); }
 
+    // [MỚI] Thêm các phương thức getter/setter cho cờ thông báo
+    public boolean hasBeenNotified() {
+        return notificationSent;
+    }
+
+    public void setNotificationSent() {
+        this.notificationSent = true;
+    }
+
     public Priority getImportanceLevel() { return importanceLevel; }
     public LocalTime getStartTime() { return startTime; }
     public Duration getBreakTime() { return breakTime; }
@@ -96,3 +109,4 @@ public class Task implements Serializable {
     public Duration getMandatoryTime() { return mandatoryTime; }
     public Duration getFocusTime() { return focusTime; }
 }
+
