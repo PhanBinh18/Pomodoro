@@ -33,6 +33,7 @@ import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 import java.net.URL;
 // [MỚI] Thêm các import thời gian
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -86,8 +87,24 @@ public class CalendarWindowController implements Initializable {
 
     public void updateListViews() {
         List<Day> dayList = calendar.getCurrentWeek().getDayList();
-        IntStream.range(0, listViews.size()).forEach(i ->
-                listViews.get(i).setItems(dayList.get(i).getTaskObservableList()));
+        LocalDate today = LocalDate.now(); // [MỚI] Lấy ngày hôm nay
+
+        IntStream.range(0, listViews.size()).forEach(i -> {
+            // Gán task cho ListView (logic cũ)
+            listViews.get(i).setItems(dayList.get(i).getTaskObservableList());
+
+            // [MỚI] Cập nhật màu cho Label (Thứ)
+            Day day = dayList.get(i);
+            Label label = labels.get(i);
+
+            if (day.getDate().isEqual(today)) {
+                // Nếu là ngày hôm nay, tô màu xanh
+                label.setStyle("-fx-background-color: #4CAF50; -fx-font-weight: bold;");
+            } else {
+                // Nếu không phải, trả về màu đỏ mặc định
+                label.setStyle("-fx-background-color: #FF6666; -fx-font-weight: bold;");
+            }
+        });
     }
 
     /* Tính toán kích thước list view và label sao cho fit với chiều ngang của cửa sổ
@@ -296,4 +313,5 @@ public class CalendarWindowController implements Initializable {
         alert.showAndWait();
     }
 }
+
 
