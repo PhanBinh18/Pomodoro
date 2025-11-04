@@ -12,13 +12,15 @@ public class Week implements Serializable {
     private final List<Day> dayList;
     private final LocalDate startDate;
 
-    public Week(LocalDate startDate) {
+    // [SỬA ĐỔI] Hàm khởi tạo đã được cập nhật để nhận defaultTasks
+    public Week(LocalDate startDate, List<Task> defaultTasks) {
         this.startDate = startDate;
         this.dayList = new ArrayList<>();
 
         for (int i = 0; i < 7; i++) {
             LocalDate dayDate = startDate.plusDays(i);
-            dayList.add(new Day(dayDate));
+            // [SỬA ĐỔI] Truyền danh sách task mặc định xuống cho mỗi Day
+            dayList.add(new Day(dayDate, defaultTasks));
         }
     }
 
