@@ -6,8 +6,10 @@
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="415.0" prefWidth="700.0" stylesheets="@../Styles/back-ground-style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="taskmanagement.controllers.CalendarWindowController">
 
     <!-- Top bar with buttons and DatePicker -->
-    <!-- [MỚI] Thêm nút Quản lý Task Mặc định -->
-    <Button fx:id="manageDefaultsButton" layoutX="14.0" layoutY="22.0" mnemonicParsing="false" onAction="#handleManageDefaults" style="-fx-background-color: #FFB74D;" text="Task Mặc định" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="22.0" />
+
+    <!-- [MỚI] Thêm nút Xóa Hết Dữ Liệu -->
+    <Button fx:id="deleteAllButton" layoutX="14.0" layoutY="22.0" mnemonicParsing="false" onAction="#handleDeleteAllTasks" style="-fx-background-color: #d93131; -fx-text-fill: white; -fx-font-weight: bold;" text="Xóa Hết Dữ Liệu" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="22.0" />
+
 
     <Button fx:id="previousButton" layoutX="200.0" layoutY="22.0" mnemonicParsing="false" onAction="#handlePreviousButtonAction" style="-fx-background-color: #FF6666;" text="Previous" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="22.0" />
 
