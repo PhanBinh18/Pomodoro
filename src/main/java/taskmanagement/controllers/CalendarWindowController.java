@@ -6,17 +6,7 @@ Khi tuần hiện tại thay đổi các task trong tuần được nạp lại 
 Đặt sự kiện khi click vào list view nào sẽ chuyển sang cửa sổ ngày tương ứng
 */
 
-// [MỚI] Thêm các import cần thiết cho Dialog
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
-import javafx.util.Duration;
+// [ĐÃ XÓA] Đã xóa các import cho Dialog
 import taskmanagement.models.Calendar;
 import taskmanagement.models.Day;
 import taskmanagement.models.Task;
@@ -32,13 +22,9 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.net.URL;
-// [MỚI] Thêm các import thời gian
+// [GIỮ LẠI] Giữ lại import này cho logic tô màu
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Optional; // [MỚI] Thêm import cho Optional
 import java.util.ResourceBundle;
 import java.util.stream.IntStream;
 
@@ -54,9 +40,7 @@ public class CalendarWindowController implements Initializable {
     @FXML
     private DatePicker datePicker;
 
-    // [MỚI] Thêm FXML cho nút mới
-    @FXML
-    private Button manageDefaultsButton;
+    // [ĐÃ XÓA] Đã xóa FXML cho manageDefaultsButton
 
     private Calendar calendar;
     private boolean isUpdatingDatePicker = false;
@@ -85,9 +69,10 @@ public class CalendarWindowController implements Initializable {
         listViews.forEach(listView -> listView.setCellFactory(_ -> new TaskCellCalendarWindow()));
     }
 
+    // [GIỮ LẠI] Giữ nguyên logic tô màu ngày hôm nay
     public void updateListViews() {
         List<Day> dayList = calendar.getCurrentWeek().getDayList();
-        LocalDate today = LocalDate.now(); // [MỚI] Lấy ngày hôm nay
+        LocalDate today = LocalDate.now(); // Lấy ngày hôm nay
 
         IntStream.range(0, listViews.size()).forEach(i -> {
             // Gán task cho ListView (logic cũ)
@@ -173,145 +158,7 @@ public class CalendarWindowController implements Initializable {
         isUpdatingDatePicker = false;
     }
 
-    // [MỚI] Thêm trình xử lý cho nút "Task Mặc định"
-    @FXML
-    private void handleManageDefaults() {
-        // Hiển thị một Dialog để người dùng nhập thông tin task mặc định
-        // Logic này tương tự như handleAddTask trong DayViewController
-        Dialog<Task> dialog = new Dialog<>();
-        dialog.setTitle("Quản lý Task Mặc định");
-        dialog.setHeaderText("Thêm một công việc mặc định mới");
-        ButtonType addButtonType = new ButtonType("Thêm", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(addButtonType, ButtonType.CANCEL);
-
-        TextField taskNameField = new TextField();
-        taskNameField.setPromptText("Tên công việc");
-
-        TextField startTimeField = new TextField();
-        startTimeField.setPromptText("Thời điểm bắt đầu (H:mm)");
-
-        TextField focusTimeField = new TextField();
-        focusTimeField.setPromptText("Quãng tập trung (phút)");
-
-        TextField breakTimeField = new TextField();
-        breakTimeField.setPromptText("Quãng nghỉ (phút)");
-
-        ChoiceBox<Task.Priority> importanceLevelChoiceBox = new ChoiceBox<>();
-        importanceLevelChoiceBox.setItems(FXCollections.observableArrayList(Task.Priority.values()));
-        importanceLevelChoiceBox.getSelectionModel().selectFirst();
-
-        TextField mandatoryTimeField = new TextField();
-        mandatoryTimeField.setPromptText("Thời gian bắt buộc (phút)");
-
-        VBox content = new VBox(10);
-        content.getChildren().addAll(
-                new Label("Tên công việc:"), taskNameField,
-                new Label("Thời gian bắt đầu:"), startTimeField,
-                new Label("Thời gian tập trung:"), focusTimeField,
-                new Label("Thời gian nghỉ:"), breakTimeField,
-                new Label("Mức độ quan trọng:"), importanceLevelChoiceBox,
-                new Label("Thời gian bắt buộc:"), mandatoryTimeField
-        );
-
-        dialog.getDialogPane().setContent(content);
-
-        // Lọc sự kiện nút "Thêm" để xác thực
-        final Button addButton = (Button) dialog.getDialogPane().lookupButton(addButtonType);
-        addButton.addEventFilter(ActionEvent.ACTION, event -> {
-            try {
-                String taskName = taskNameField.getText();
-                if (taskName == null || taskName.trim().isEmpty()) {
-                    showErrorDialog("Dữ liệu không hợp lệ", "Tên công việc không được để trống.");
-                    event.consume();
-                    return;
-                }
-
-                LocalTime startTime = LocalTime.parse(startTimeField.getText(), DateTimeFormatter.ofPattern("H:mm"));
-                Duration focusTime = Duration.minutes(Integer.parseInt(focusTimeField.getText()));
-                Duration breakTime = Duration.minutes(Integer.parseInt(breakTimeField.getText()));
-                Task.Priority importanceLevel = importanceLevelChoiceBox.getValue();
-                Duration mandatoryTime = Duration.minutes(Integer.parseInt(mandatoryTimeField.getText()));
-
-                Task newTask = new Task(taskName, startTime, focusTime, breakTime, importanceLevel, mandatoryTime);
-
-                // [MỚI] Logic kiểm tra xung đột trong tuần hiện tại
-                if (isTimeConflictInCurrentWeek(newTask)) {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setHeaderText("Xung đột thời gian trong tuần hiện tại!");
-                    alert.setContentText("Task này bị trùng lịch với một task đã có trong tuần hiện tại. Bạn có chắc chắn muốn thêm không?");
-                    Optional<ButtonType> result = alert.showAndWait();
-                    if (result.isEmpty() || result.get() != ButtonType.OK) {
-                        event.consume(); // Ngăn dialog đóng và dừng lại
-                        return;
-                    }
-                }
-
-                // [QUAN TRỌNG] Thêm vào danh sách task mặc định của Calendar (cho tương lai)
-                calendar.addDefaultTask(newTask);
-
-                // [MỚI] Thêm (bản sao) vào tuần hiện tại
-                List<Day> currentDays = calendar.getCurrentWeek().getDayList();
-                for (Day day : currentDays) {
-                    // Tạo một bản sao MỚI cho mỗi ngày
-                    Task taskCopy = new Task(newTask.getTaskName(), newTask.getStartTime(),
-                            newTask.getFocusTime(), newTask.getBreakTime(),
-                            newTask.getImportanceLevel(), newTask.getMandatoryTime());
-                    // Dùng phương thức addTask của Day để tự động sắp xếp
-                    day.addTask(taskCopy);
-                }
-
-                // Thông báo thành công
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText("Thành công");
-                // [MỚI] Cập nhật nội dung thông báo
-                alert.setContentText("Đã thêm task mặc định. Task này đã được áp dụng cho tuần hiện tại và các tuần mới trong tương lai.");
-                alert.showAndWait();
-
-            } catch (DateTimeParseException e) {
-                showErrorDialog("Lỗi định dạng", "Thời gian bắt đầu phải theo định dạng HH:mm.");
-                event.consume(); // Ngăn dialog đóng lại
-            } catch (NumberFormatException e) {
-                showErrorDialog("Lỗi định dạng", "Thời gian tập trung, nghỉ và bắt buộc phải là số nguyên.");
-                event.consume(); // Ngăn dialog đóng lại
-            } catch (Exception e) {
-                showErrorDialog("Dữ liệu không hợp lệ", "Vui lòng đảm bảo tất cả các trường đều được nhập đúng định dạng.");
-                event.consume(); // Ngăn dialog đóng lại
-            }
-        });
-
-        dialog.showAndWait();
-    }
-
-    // [MỚI] Thêm phương thức kiểm tra xung đột cho cả tuần hiện tại
-    private boolean isTimeConflictInCurrentWeek(Task newTask) {
-        List<Day> currentDays = calendar.getCurrentWeek().getDayList();
-        LocalTime newStart = newTask.getStartTime();
-        // Lấy thời gian kết thúc dựa trên mandatoryTime, giống logic của DayViewController
-        LocalTime newEnd = newStart.plusSeconds((long) newTask.getMandatoryTime().toSeconds());
-
-        for (Day day : currentDays) {
-            // Tái sử dụng logic kiểm tra xung đột từ DayViewController
-            boolean conflictInThisDay = day.getTaskObservableList().stream().anyMatch(existingTask -> {
-                LocalTime existingStart = existingTask.getStartTime();
-                LocalTime existingEnd = existingStart.plusSeconds((long) existingTask.getMandatoryTime().toSeconds());
-                // Kiểm tra xem khoảng thời gian mới [newStart, newEnd] có chồng lấn với [existingStart, existingEnd] không
-                return newStart.isBefore(existingEnd) && newEnd.isAfter(existingStart);
-            });
-
-            if (conflictInThisDay) {
-                return true; // Tìm thấy một xung đột vào ngày này
-            }
-        }
-        return false; // Không tìm thấy xung đột nào trong cả tuần
-    }
-
-    // [MỚI] Thêm phương thức trợ giúp để hiển thị lỗi (tái sử dụng từ DayViewController)
-    private void showErrorDialog(String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
+    // [ĐÃ XÓA] Đã xóa toàn bộ logic "handleManageDefaults"
+    // [ĐÃ XÓA] Đã xóa "isTimeConflictInCurrentWeek"
+    // [ĐÃ XÓA] Đã xóa "showErrorDialog"
 }
-
-

@@ -9,9 +9,9 @@ import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList; // [MỚI] Cần import
+// import java.util.ArrayList; // [ĐÃ XÓA] Không cần thiết nữa
 import java.util.HashMap;
-import java.util.List; // [MỚI] Cần import
+// import java.util.List; // [ĐÃ XÓA] Không cần thiết nữa
 import java.util.Map;
 
 public class Calendar implements Serializable {
@@ -20,15 +20,12 @@ public class Calendar implements Serializable {
     private final Map<LocalDate, Week> weeks = new HashMap<>();
     private LocalDate startOfCurrentWeek;
 
-    // [MỚI] Danh sách để lưu trữ các công việc mặc định
-    private List<Task> defaultTasks;
-
-    // [MỚI] Tên tệp tin để lưu các công việc mặc định
-    private static final String DEFAULT_TASKS_FILENAME = "default-tasks.dat";
+    // [ĐÃ XÓA] Đã xóa List<Task> defaultTasks
+    // [ĐÃ XÓA] Đã xóa DEFAULT_TASKS_FILENAME
 
     // Đặt startOfCurrentWeek là đầu tuần
     public Calendar() {
-        loadDefaultTasks(); // [MỚI] Tải các task mặc định khi khởi động
+        // [ĐÃ XÓA] Đã xóa loadDefaultTasks();
         this.startOfCurrentWeek = LocalDate.now().with(DayOfWeek.MONDAY);
         updateWeekMap();
     }
@@ -43,14 +40,14 @@ public class Calendar implements Serializable {
     private Week loadWeek() {
         File file = new File(getWeekFilePath(startOfCurrentWeek));
         if (!file.exists()) {
-            // [SỬA ĐỔI] Khi tạo Tuần mới, truyền danh sách defaultTasks vào
-            return new Week(startOfCurrentWeek, defaultTasks);
+            // [SỬA ĐỔI] Khôi phục về phiên bản gốc
+            return new Week(startOfCurrentWeek);
         }
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             return (Week) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            // [SỬA ĐỔI] Nếu lỗi, cũng tạo Tuần mới với các task mặc định
-            return new Week(startOfCurrentWeek, defaultTasks);
+            // [SỬA ĐỔI] Khôi phục về phiên bản gốc
+            return new Week(startOfCurrentWeek);
         }
     }
 
@@ -70,8 +67,7 @@ public class Calendar implements Serializable {
             }
         }
 
-        // [MỚI] Gọi phương thức để lưu các task mặc định
-        saveDefaultTasks();
+        // [ĐÃ XÓA] Đã xóa saveDefaultTasks();
     }
 
     private String getWeekFilePath(LocalDate weekStart) {
@@ -81,51 +77,8 @@ public class Calendar implements Serializable {
                 weekStart.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + ".dat").toString();
     }
 
-    // [MỚI] Lấy đường dẫn tệp lưu task mặc định
-    private String getDefaultTasksFilePath() {
-        return Paths.get(System.getProperty("user.home"),
-                "Documents",
-                "saved-weeks",
-                DEFAULT_TASKS_FILENAME).toString();
-    }
-
-    // [MỚI] Tải danh sách task mặc định từ tệp
-    @SuppressWarnings("unchecked") // Bỏ cảnh báo cast (List<Task>)
-    private void loadDefaultTasks() {
-        File file = new File(getDefaultTasksFilePath());
-        if (!file.exists()) {
-            this.defaultTasks = new ArrayList<>();
-            return;
-        }
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            this.defaultTasks = (List<Task>) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Không thể tải default tasks, tạo danh sách mới.");
-            this.defaultTasks = new ArrayList<>();
-        }
-    }
-
-    // [MỚI] Lưu danh sách task mặc định vào tệp
-    private void saveDefaultTasks() throws IOException {
-        Path directoryPath = Paths.get(System.getProperty("user.home"), "Documents", "saved-weeks");
-        if (Files.notExists(directoryPath)) {
-            Files.createDirectories(directoryPath);
-        }
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(getDefaultTasksFilePath()))) {
-            oos.writeObject(defaultTasks);
-        }
-    }
-
-    // [MỚI] Các phương thức để Controller quản lý
-    public void addDefaultTask(Task task) {
-        this.defaultTasks.add(task);
-    }
-
-    public List<Task> getDefaultTasks() {
-        return this.defaultTasks;
-    }
-
-    // (Bạn có thể thêm removeDefaultTask sau nếu cần)
+    // [ĐÃ XÓA] Toàn bộ các phương thức liên quan đến Default Tasks đã bị xóa
+    // (getDefaultTasksFilePath, loadDefaultTasks, saveDefaultTasks, addDefaultTask, getDefaultTasks)
 
     public void setToNextWeek() {
         startOfCurrentWeek = startOfCurrentWeek.plusWeeks(1);

@@ -25,30 +25,11 @@ public class Day implements Serializable {
     private transient ObservableList<Task> taskObservableList;
     private List<Task> serializableList;
 
-    // [SỬA ĐỔI] Hàm khởi tạo đã được cập nhật để nhận defaultTasks
-    public Day(LocalDate date, List<Task> defaultTasks) {
+    // [SỬA ĐỔI] Khôi phục về constructor gốc, không nhận defaultTasks
+    public Day(LocalDate date) {
         this.date = date;
         this.taskObservableList = FXCollections.observableArrayList();
-
-        // [MỚI] Thêm các bản sao của công việc mặc định vào danh sách của ngày
-        if (defaultTasks != null) {
-            for (Task defaultTask : defaultTasks) {
-                // [QUAN TRỌNG] Tạo một bản sao (copy) của task mặc định
-                // Điều này đảm bảo mỗi ngày có một instance Task riêng biệt,
-                // không phải là cùng một đối tượng
-                Task newTask = new Task(
-                        defaultTask.getTaskName(),
-                        defaultTask.getStartTime(),
-                        defaultTask.getFocusTime(),
-                        defaultTask.getBreakTime(),
-                        defaultTask.getImportanceLevel(),
-                        defaultTask.getMandatoryTime()
-                );
-                this.taskObservableList.add(newTask);
-            }
-            // Sắp xếp lại danh sách sau khi thêm các task mặc định
-            sortTasksByTime();
-        }
+        // [ĐÃ XÓA] Đã xóa logic vòng lặp 'for (Task defaultTask...)'
     }
 
     public LocalDate getDate() {
@@ -61,7 +42,9 @@ public class Day implements Serializable {
     }
 
     private void sortTasksByTime() {
-        taskObservableList.sort(Comparator.comparing(Task::getStartTime));
+        // [SỬA ĐỔI] Cần kiểm tra kiểu dữ liệu 'Task' của bạn
+        // Giả sử Task của bạn có getStartTime()
+        taskObservableList.sort(Comparator.comparing(taskmanagement.models.Task::getStartTime));
     }
 
     public void removeTask(Task task) {
@@ -83,8 +66,7 @@ public class Day implements Serializable {
     @Serial
     private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
         ois.defaultReadObject();
-        // [SỬA ĐỔI] Khi tải từ tệp, chúng ta không thêm task mặc định nữa
-        // vì tệp đã lưu (serializableList) đã chứa chúng rồi.
+        // Logic này là chính xác và không thay đổi
         taskObservableList = FXCollections.observableArrayList(serializableList);
     }
 
