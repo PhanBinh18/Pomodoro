@@ -6,7 +6,10 @@
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="415.0" prefWidth="700.0" stylesheets="@../Styles/back-ground-style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="taskmanagement.controllers.CalendarWindowController">
 
     <!-- Top bar with buttons and DatePicker -->
-    <!-- [ĐÃ XÓA] Đã xóa Button "manageDefaultsButton" -->
+
+    <!-- [MỚI] Thêm nút Xóa Hết Dữ Liệu -->
+    <Button fx:id="deleteAllButton" layoutX="14.0" layoutY="22.0" mnemonicParsing="false" onAction="#handleDeleteAllTasks" style="-fx-background-color: #d93131; -fx-text-fill: white; -fx-font-weight: bold;" text="Xóa Hết Dữ Liệu" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="22.0" />
+
 
     <Button fx:id="previousButton" layoutX="200.0" layoutY="22.0" mnemonicParsing="false" onAction="#handlePreviousButtonAction" style="-fx-background-color: #FF6666;" text="Previous" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="22.0" />
 
@@ -23,7 +26,7 @@
     <ListView fx:id="tuesdayListView" layoutX="100.0" layoutY="120.0" onMouseClicked="#tuesdayClicked" prefHeight="295.0" prefWidth="86.0" style="-fx-border-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="119.80000000000001" />
 
     <!-- Wednesday -->
-    <Label fx:id="wednesdayLabel" alignment="CENTER" layoutX="200.0" layoutY="80.0" onMouseClicked="#wednesdayClicked" prefHeight="4.0" prefWidth="86.0" style="-fx-background-color: #FF6666; -fx-font-weight: bold;" text="Wednesday" />
+    <Label fx:id="wednesdayLabel" alignment="CENTER" layoutX="200.0" layoutY="80.0" onMouseClicked="#wednesdayClicked" prefHeight="40.0" prefWidth="86.0" style="-fx-background-color: #FF6666; -fx-font-weight: bold;" text="Wednesday" />
     <ListView fx:id="wednesdayListView" layoutX="200.0" layoutY="120.0" onMouseClicked="#wednesdayClicked" prefHeight="295.0" prefWidth="86.0" style="-fx-border-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="119.80000000000001" />
 
     <!-- Thursday -->

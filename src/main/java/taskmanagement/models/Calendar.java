@@ -9,10 +9,11 @@ import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-// import java.util.ArrayList; // [ĐÃ XÓA] Không cần thiết nữa
 import java.util.HashMap;
-// import java.util.List; // [ĐÃ XÓA] Không cần thiết nữa
 import java.util.Map;
+// [MỚI] Thêm import để duyệt file
+import java.nio.file.DirectoryStream;
+
 
 public class Calendar implements Serializable {
     @Serial
@@ -79,6 +80,32 @@ public class Calendar implements Serializable {
 
     // [ĐÃ XÓA] Toàn bộ các phương thức liên quan đến Default Tasks đã bị xóa
     // (getDefaultTasksFilePath, loadDefaultTasks, saveDefaultTasks, addDefaultTask, getDefaultTasks)
+
+    // [MỚI] Phương thức xóa toàn bộ dữ liệu
+    public void deleteAllData() throws IOException {
+        // 1. Xóa dữ liệu trong bộ nhớ (RAM)
+        weeks.clear();
+
+        // 2. Xóa dữ liệu trên ổ cứng (File)
+        Path directoryPath = Paths.get(System.getProperty("user.home"), "Documents", "saved-weeks");
+
+        // Kiểm tra xem thư mục có tồn tại không
+        if (Files.exists(directoryPath) && Files.isDirectory(directoryPath)) {
+            // Mở một luồng (stream) để duyệt các tệp trong thư mục
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(directoryPath, "*.dat")) {
+                // Lặp qua và xóa từng tệp có đuôi .dat
+                for (Path file : stream) {
+                    Files.delete(file);
+                }
+            }
+        }
+
+        // 3. Tải lại tuần hiện tại (sẽ là một tuần trống mới)
+        // Đặt lại ngày bắt đầu về hôm nay (để chắc chắn)
+        this.startOfCurrentWeek = LocalDate.now().with(DayOfWeek.MONDAY);
+        updateWeekMap();
+    }
+
 
     public void setToNextWeek() {
         startOfCurrentWeek = startOfCurrentWeek.plusWeeks(1);

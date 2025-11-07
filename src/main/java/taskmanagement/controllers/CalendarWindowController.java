@@ -6,7 +6,11 @@ Khi tuần hiện tại thay đổi các task trong tuần được nạp lại 
 Đặt sự kiện khi click vào list view nào sẽ chuyển sang cửa sổ ngày tương ứng
 */
 
-// [ĐÃ XÓA] Đã xóa các import cho Dialog
+// [MỚI] Thêm import cho Alert và Optional
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import java.util.Optional;
+
 import taskmanagement.models.Calendar;
 import taskmanagement.models.Day;
 import taskmanagement.models.Task;
@@ -22,7 +26,6 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.net.URL;
-// [GIỮ LẠI] Giữ lại import này cho logic tô màu
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -40,7 +43,9 @@ public class CalendarWindowController implements Initializable {
     @FXML
     private DatePicker datePicker;
 
-    // [ĐÃ XÓA] Đã xóa FXML cho manageDefaultsButton
+    // [MỚI] Thêm FXML cho nút Xóa Hết
+    @FXML
+    private Button deleteAllButton;
 
     private Calendar calendar;
     private boolean isUpdatingDatePicker = false;
@@ -158,7 +163,42 @@ public class CalendarWindowController implements Initializable {
         isUpdatingDatePicker = false;
     }
 
-    // [ĐÃ XÓA] Đã xóa toàn bộ logic "handleManageDefaults"
-    // [ĐÃ XÓA] Đã xóa "isTimeConflictInCurrentWeek"
-    // [ĐÃ XÓA] Đã xóa "showErrorDialog"
+    // [MỚI] Thêm trình xử lý cho nút Xóa Hết Dữ Liệu
+    @FXML
+    private void handleDeleteAllTasks() {
+        // Hiển thị hộp thoại xác nhận CỰC KỲ RÕ RÀNG
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Xác nhận Xóa");
+        alert.setHeaderText("BẠN CÓ CHẮC CHẮN KHÔNG?");
+        alert.setContentText("Hành động này sẽ XÓA VĨNH VIỄN tất cả các công việc đã lưu.\n" +
+                "Không thể hoàn tác. Bạn có chắc chắn muốn tiếp tục?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        // Chỉ tiếp tục nếu người dùng nhấn OK
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                // Gọi phương thức (sắp tạo) trong Model
+                calendar.deleteAllData();
+
+                // Làm mới giao diện (sẽ trống trơn)
+                updateListViews();
+
+                // Hiển thị thông báo thành công
+                Alert doneAlert = new Alert(Alert.AlertType.INFORMATION);
+                doneAlert.setTitle("Hoàn tất");
+                doneAlert.setHeaderText("Đã xóa toàn bộ dữ liệu.");
+                doneAlert.showAndWait();
+
+            } catch (IOException e) {
+                // Hiển thị lỗi nếu không xóa được file
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Lỗi");
+                errorAlert.setHeaderText("Không thể xóa dữ liệu.");
+                errorAlert.setContentText("Đã xảy ra lỗi khi cố gắng xóa các tệp đã lưu: " + e.getMessage());
+                errorAlert.showAndWait();
+            }
+        }
+        // Nếu người dùng nhấn "Cancel", không làm gì cả.
+    }
 }
